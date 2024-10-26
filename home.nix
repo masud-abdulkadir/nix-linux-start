@@ -1,13 +1,8 @@
 {
-  # FIXME: uncomment the next line if you want to reference your GitHub/GitLab access tokens and other secrets
-  # secrets,
   pkgs,
   nix-index-database,
-  ...
 }: let
   unstable-packages = with pkgs.unstable; [
-    # FIXME: select your core binaries that you always want on the bleeding-edge
-    bat
     bottom
     coreutils
     curl
@@ -30,13 +25,6 @@
   ];
 
   stable-packages = with pkgs; [
-    # FIXME: customize these stable packages to your liking for the languages that you use
-
-    # FIXME: you can add plugins, change keymaps etc using (jeezyvim.nixvimExtend {})
-    # https://github.com/LGUG2Z/JeezyVim#extending
-    # jeezyvim
-    # jeezyvim.nixvimExtend { vimPluggins.harpoon }
-
     # key tools
     gh # for bootstrapping
     just
@@ -47,8 +35,6 @@
     # rust stuff
     cargo-cache
     cargo-expand
-
-    # local dev stuf
 
     # treesitter
     tree-sitter
@@ -70,21 +56,13 @@ in {
   ];
 
 
-  home = {
-    username = "${username}";
-    homeDirectory = "/home/${username}";
+  # Home Manager needs a bit of information about you and the
+  # paths it should manage.
+  home.username = "dlurker";
+  home.homeDirectory = "/home/dlurker";
 
-  };
 
-  home.packages =
-    stable-packages
-    ++ unstable-packages
-    ++
-    # FIXME: you can add anything else that doesn't fit into the above two lists in here
-    [
-      # pkgs.some-package
-      # pkgs.unstable.some-other-package
-    ];
+  home.packages = stable-packages ++ unstable-packages;
 
   home.stateVersion = "24.05";
 
@@ -92,6 +70,5 @@ in {
   programs = {
     home-manager.enable = true;
     nix-index.enable = true;
-    nix-index.enableFishIntegration = true;
     nix-index-database.comma.enable = true;
    };
