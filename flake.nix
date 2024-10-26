@@ -13,15 +13,20 @@
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nur, nix-index-database, ... }:
     let
+      username = "dlurker";
+      homeDir = "/home/${username}";
       system = "x86_64-linux";  # Adjust if on a different architecture
       pkgs = import nixpkgs { inherit system; overlays = [ nur.overlay ]; };
     in {
       homeConfigurations = {
-        # Set up Home Manager for user configuration
-        "m" = home-manager.lib.homeManagerConfiguration {
-          inherit system;
-          pkgs = import nixpkgs { inherit system; overlays = [ nur.overlay ]; };
-          configuration = import ./home.nix;
+        "${username}" = home-manager.lib.homeManagerConfiguration {
+          inherit system pkgs;
+          homeDirectory = homeDir;
+          username = username;
+
+          configuration = import ./home.nix {
+            inherit pkgs nix-index-database username homeDir;
+          };
         };
       };
 

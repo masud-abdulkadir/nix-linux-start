@@ -1,6 +1,8 @@
 {
   pkgs,
   nix-index-database,
+  username,
+  homeDir,
 }: let
   unstable-packages = with pkgs.unstable; [
     bottom
@@ -56,15 +58,18 @@ in {
   ];
 
 
-  # Home Manager needs a bit of information about you and the
-  # paths it should manage.
-  home.username = "dlurker";
-  home.homeDirectory = "/home/dlurker";
+  home = {
+    # User & Home Directory 
+    username = "${username}";
+    homeDirectory = "/home/${username}";
 
+    #packages
+    home.packages = stable-packages ++ unstable-packages;
 
-  home.packages = stable-packages ++ unstable-packages;
+    #stateVersion
+    stateVersion = "24.05";
 
-  home.stateVersion = "24.05";
+  };
 
 
   programs = {
